@@ -20,10 +20,18 @@ const latestLabel = latest ? `第${latest.id}話` : '';
 
 const descendingEpisodes = [...episodes].reverse();
 const episodeSortOptions = [
-	{ value: 'desc', label: '降順' },
-	{ value: 'asc', label: '昇順' },
+	{
+		value: 'desc',
+		label: '降順',
+		iconPath: 'M19 7H22L18 3L14 7H17V21H19M2 17H12V19H2M6 5V7H2V5M2 11H9V13H2V11Z',
+	},
+	{
+		value: 'asc',
+		label: '昇順',
+		iconPath: 'M19 17H22L18 21L14 17H17V3H19M2 17H12V19H2M6 5V7H2V5M2 11H9V13H2V11Z',
+	},
 ];
-const episodeSortButtonBaseClass = 'w-full rounded border border-base-300 px-2 py-1.5 text-center text-sm font-semibold leading-none transition-colors';
+const episodeSortButtonBaseClass = 'flex h-9 w-full items-center justify-center rounded border border-base-300 transition-colors';
 const getEpisodeSortButtonClass = (sortDirection: string) => (
 	`${episodeSortButtonBaseClass} ${sortDirection === 'desc'
 		? 'bg-primary text-primary-content'
@@ -133,8 +141,17 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 															class={getEpisodeSortButtonClass(option.value)}
 															data-episode-sort={option.value}
 															aria-pressed={option.value === 'desc' ? 'true' : 'false'}
+															aria-label={`話数を${option.label}で表示`}
+															title={option.label}
 														>
-															{option.label}
+															<svg
+																aria-hidden="true"
+																viewBox="0 0 24 24"
+																class="h-5 w-5 fill-current"
+															>
+																<path d={option.iconPath}></path>
+															</svg>
+															<span class="sr-only">{option.label}</span>
 														</button>
 													))
 												}
@@ -270,8 +287,17 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 																class={getEpisodeSortButtonClass(option.value)}
 																data-episode-sort={option.value}
 																aria-pressed={option.value === 'desc' ? 'true' : 'false'}
+																aria-label={`話数を${option.label}で表示`}
+																title={option.label}
 															>
-																{option.label}
+																<svg
+																	aria-hidden="true"
+																	viewBox="0 0 24 24"
+																	class="h-5 w-5 fill-current"
+																>
+																	<path d={option.iconPath}></path>
+																</svg>
+																<span class="sr-only">{option.label}</span>
 															</button>
 														))
 													}
