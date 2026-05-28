@@ -23,7 +23,7 @@ const episodeSortOptions = [
 	{ value: 'desc', label: '降順' },
 	{ value: 'asc', label: '昇順' },
 ];
-const episodeSortButtonBaseClass = 'rounded border border-base-300 px-2.5 py-1 text-xs font-semibold leading-none transition-colors';
+const episodeSortButtonBaseClass = 'rounded border border-base-300 px-2 py-1.5 text-sm font-semibold leading-none transition-colors';
 const getEpisodeSortButtonClass = (sortDirection: string) => (
 	`${episodeSortButtonBaseClass} ${sortDirection === 'desc'
 		? 'bg-base-content text-base-100'
@@ -123,9 +123,9 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 										話数
 									</summary>
 									<div class="border-t border-base-300 p-2">
-										<div class="mb-2 flex items-center justify-between gap-2 px-2">
-											<span class="text-xs text-base-content/60">表示順</span>
-											<div class="flex gap-1" aria-label="話数の表示順">
+										<div class="mb-3 px-2">
+											<div class="mb-1 text-xs text-base-content/60">表示順</div>
+											<div class="grid grid-cols-2 gap-2" aria-label="話数の表示順">
 												{
 													episodeSortOptions.map((option) => (
 														<button
@@ -260,9 +260,9 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 											話数
 										</summary>
 										<div class="border-t border-base-300 p-2">
-											<div class="mb-2 flex items-center justify-between gap-2 px-2">
-												<span class="text-xs text-base-content/60">表示順</span>
-												<div class="flex gap-1" aria-label="話数の表示順">
+											<div class="mb-3 px-2">
+												<div class="mb-1 text-xs text-base-content/60">表示順</div>
+												<div class="grid grid-cols-2 gap-2" aria-label="話数の表示順">
 													{
 														episodeSortOptions.map((option) => (
 															<button
