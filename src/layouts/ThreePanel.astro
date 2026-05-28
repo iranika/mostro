@@ -119,12 +119,12 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 									<div class="border-t border-base-300 p-2">
 										<div class="mb-2 flex items-center justify-between gap-2 px-2">
 											<span class="text-xs text-base-content/60">表示順</span>
-											<div class="join" aria-label="話数の表示順">
+											<div class="flex gap-1" aria-label="話数の表示順">
 												{
 													episodeSortOptions.map((option) => (
 														<button
 															type="button"
-															class={`btn btn-xs join-item${option.value === 'desc' ? ' btn-active' : ''}`}
+															class={`btn btn-sm min-w-12 px-3 text-xs${option.value === 'desc' ? ' btn-active' : ''}`}
 															data-episode-sort={option.value}
 															aria-pressed={option.value === 'desc' ? 'true' : 'false'}
 														>
@@ -256,12 +256,12 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 										<div class="border-t border-base-300 p-2">
 											<div class="mb-2 flex items-center justify-between gap-2 px-2">
 												<span class="text-xs text-base-content/60">表示順</span>
-												<div class="join" aria-label="話数の表示順">
+												<div class="flex gap-1" aria-label="話数の表示順">
 													{
 														episodeSortOptions.map((option) => (
 															<button
 																type="button"
-																class={`btn btn-xs join-item${option.value === 'desc' ? ' btn-active' : ''}`}
+																class={`btn btn-sm min-w-12 px-3 text-xs${option.value === 'desc' ? ' btn-active' : ''}`}
 																data-episode-sort={option.value}
 																aria-pressed={option.value === 'desc' ? 'true' : 'false'}
 															>
