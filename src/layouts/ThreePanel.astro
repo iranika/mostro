@@ -266,25 +266,23 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 	</div>
 
 	<script is:inline>
-		{String.raw`
-(() => {
-  const root = document.documentElement;
-  const toggles = Array.from(document.querySelectorAll('input[data-theme-toggle]'))
-    .filter((el) => el instanceof HTMLInputElement);
-  const syncFromRoot = () => {
-    const current = root.getAttribute('data-theme');
-    toggles.forEach((t) => { t.checked = current === 'dark'; });
-  };
-  const setTheme = (next) => {
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('theme', next); } catch {}
-    syncFromRoot();
-  };
-  syncFromRoot();
-  toggles.forEach((toggle) => {
-    toggle.addEventListener('change', () => setTheme(toggle.checked ? 'dark' : 'light'));
-  });
-})();
-`}
+		(() => {
+			const root = document.documentElement;
+			const toggles = Array.from(document.querySelectorAll('input[data-theme-toggle]'))
+				.filter((el) => el instanceof HTMLInputElement);
+			const syncFromRoot = () => {
+				const current = root.getAttribute('data-theme');
+				toggles.forEach((t) => { t.checked = current === 'dark'; });
+			};
+			const setTheme = (next) => {
+				root.setAttribute('data-theme', next);
+				try { localStorage.setItem('theme', next); } catch {}
+				syncFromRoot();
+			};
+			syncFromRoot();
+			toggles.forEach((toggle) => {
+				toggle.addEventListener('change', () => setTheme(toggle.checked ? 'dark' : 'light'));
+			});
+		})();
 	</script>
 </Layout>

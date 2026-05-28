@@ -204,9 +204,9 @@ function resolvePageParam(): string {
 }
 
 .btn-nav {
-  border: 1px solid #bfbfbf;
-  background: #ffffff;
-  color: #222;
+  border: 1px solid var(--color-base-300);
+  background: var(--color-base-100);
+  color: var(--color-base-content);
   border-radius: 9999px;
   padding: 4px 10px;
   font-size: 12px;
