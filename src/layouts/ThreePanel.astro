@@ -18,7 +18,11 @@ const episodes = getMangaEpisodes();
 const latest = episodes.at(-1);
 const latestLabel = latest ? `第${latest.id}話` : '';
 
-const reversedEpisodes = [...episodes].reverse();
+const descendingEpisodes = [...episodes].reverse();
+const episodeSortOptions = [
+	{ value: 'desc', label: '降順' },
+	{ value: 'asc', label: '昇順' },
+];
 
 const hasLeft = Astro.slots.has('left');
 const hasRight = Astro.slots.has('right');
@@ -113,11 +117,28 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 										話数
 									</summary>
 									<div class="border-t border-base-300 p-2">
-										<div class="max-h-[420px] overflow-auto">
-											<ul class="menu menu-sm">
+										<div class="mb-2 flex items-center justify-between gap-2 px-2">
+											<span class="text-xs text-base-content/60">表示順</span>
+											<div class="join" aria-label="話数の表示順">
 												{
-													reversedEpisodes.map((episode) => (
-														<li>
+													episodeSortOptions.map((option) => (
+														<button
+															type="button"
+															class={`btn btn-xs join-item${option.value === 'desc' ? ' btn-active' : ''}`}
+															data-episode-sort={option.value}
+															aria-pressed={option.value === 'desc' ? 'true' : 'false'}
+														>
+															{option.label}
+														</button>
+													))
+												}
+											</div>
+										</div>
+										<div class="max-h-[420px] overflow-auto">
+											<ul class="menu menu-sm" data-episode-list>
+												{
+													descendingEpisodes.map((episode) => (
+														<li data-episode-id={episode.id}>
 															<a href={`/viewer?page=${episode.id}`}>
 																第{episode.id}話
 															</a>
@@ -233,11 +254,28 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 											話数
 										</summary>
 										<div class="border-t border-base-300 p-2">
-											<div class="max-h-[50vh] overflow-auto">
-												<ul class="menu menu-sm">
+											<div class="mb-2 flex items-center justify-between gap-2 px-2">
+												<span class="text-xs text-base-content/60">表示順</span>
+												<div class="join" aria-label="話数の表示順">
 													{
-														reversedEpisodes.map((episode) => (
-															<li>
+														episodeSortOptions.map((option) => (
+															<button
+																type="button"
+																class={`btn btn-xs join-item${option.value === 'desc' ? ' btn-active' : ''}`}
+																data-episode-sort={option.value}
+																aria-pressed={option.value === 'desc' ? 'true' : 'false'}
+															>
+																{option.label}
+															</button>
+														))
+													}
+												</div>
+											</div>
+											<div class="max-h-[50vh] overflow-auto">
+												<ul class="menu menu-sm" data-episode-list>
+													{
+														descendingEpisodes.map((episode) => (
+															<li data-episode-id={episode.id}>
 																<a href={`/viewer?page=${episode.id}`}>
 																	第{episode.id}話
 																</a>
@@ -283,6 +321,48 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 			toggles.forEach((toggle) => {
 				toggle.addEventListener('change', () => setTheme(toggle.checked ? 'dark' : 'light'));
 			});
+		})();
+
+		(() => {
+			const lists = Array.from(document.querySelectorAll('[data-episode-list]'))
+				.filter((el) => el instanceof HTMLElement);
+			const controls = Array.from(document.querySelectorAll('[data-episode-sort]'))
+				.filter((el) => el instanceof HTMLButtonElement);
+			if (!lists.length || !controls.length) return;
+
+			const setSort = (direction) => {
+				const directionMultiplier = direction === 'asc' ? 1 : -1;
+
+				lists.forEach((list) => {
+					const items = Array.from(list.children)
+						.filter((el) => el instanceof HTMLElement && el.dataset.episodeId);
+
+					items
+						.sort((a, b) => {
+							const episodeA = Number(a.dataset.episodeId);
+							const episodeB = Number(b.dataset.episodeId);
+							return (episodeA - episodeB) * directionMultiplier;
+						})
+						.forEach((item) => list.appendChild(item));
+				});
+
+				controls.forEach((control) => {
+					const isActive = control.dataset.episodeSort === direction;
+					control.classList.toggle('btn-active', isActive);
+					control.setAttribute('aria-pressed', String(isActive));
+				});
+			};
+
+			controls.forEach((control) => {
+				control.addEventListener('click', () => {
+					const direction = control.dataset.episodeSort;
+					if (direction === 'asc' || direction === 'desc') {
+						setSort(direction);
+					}
+				});
+			});
+
+			setSort('desc');
 		})();
 	</script>
 </Layout>
