@@ -23,6 +23,12 @@ const episodeSortOptions = [
 	{ value: 'desc', label: '降順' },
 	{ value: 'asc', label: '昇順' },
 ];
+const episodeSortButtonBaseClass = 'rounded border border-base-300 px-2.5 py-1 text-xs font-semibold leading-none transition-colors';
+const getEpisodeSortButtonClass = (sortDirection: string) => (
+	`${episodeSortButtonBaseClass} ${sortDirection === 'desc'
+		? 'bg-base-content text-base-100'
+		: 'bg-base-100 text-base-content hover:bg-base-200'}`
+);
 
 const hasLeft = Astro.slots.has('left');
 const hasRight = Astro.slots.has('right');
@@ -124,7 +130,7 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 													episodeSortOptions.map((option) => (
 														<button
 															type="button"
-															class={`btn btn-sm min-w-12 px-3 text-xs${option.value === 'desc' ? ' btn-active' : ''}`}
+															class={getEpisodeSortButtonClass(option.value)}
 															data-episode-sort={option.value}
 															aria-pressed={option.value === 'desc' ? 'true' : 'false'}
 														>
@@ -261,7 +267,7 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 														episodeSortOptions.map((option) => (
 															<button
 																type="button"
-																class={`btn btn-sm min-w-12 px-3 text-xs${option.value === 'desc' ? ' btn-active' : ''}`}
+																class={getEpisodeSortButtonClass(option.value)}
 																data-episode-sort={option.value}
 																aria-pressed={option.value === 'desc' ? 'true' : 'false'}
 															>
@@ -329,6 +335,8 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 			const controls = Array.from(document.querySelectorAll('[data-episode-sort]'))
 				.filter((el) => el instanceof HTMLButtonElement);
 			if (!lists.length || !controls.length) return;
+			const activeClasses = ['bg-base-content', 'text-base-100'];
+			const inactiveClasses = ['bg-base-100', 'text-base-content', 'hover:bg-base-200'];
 
 			const setSort = (direction) => {
 				const directionMultiplier = direction === 'asc' ? 1 : -1;
@@ -348,7 +356,11 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 
 				controls.forEach((control) => {
 					const isActive = control.dataset.episodeSort === direction;
-					control.classList.toggle('btn-active', isActive);
+					control.classList.toggle(activeClasses[0], isActive);
+					control.classList.toggle(activeClasses[1], isActive);
+					inactiveClasses.forEach((className) => {
+						control.classList.toggle(className, !isActive);
+					});
 					control.setAttribute('aria-pressed', String(isActive));
 				});
 			};
