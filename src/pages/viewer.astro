@@ -1,4 +1,5 @@
 ---
+import ContentColumn from '../components/widget/ContentColumn.astro';
 import ThreePanel from '../layouts/ThreePanel.astro';
 import ViewerContent from '../components/ViewerContent.vue';
 import { getMangaEpisodes } from '../lib/mangaData';
@@ -7,10 +8,7 @@ const mangaEpisodes = getMangaEpisodes();
 ---
 
 <ThreePanel title="Viewer">
-	<div class="w-full max-w-[560px] border border-base-300 bg-base-100">
-		<ViewerContent
-			client:only
-			mangaEpisodes={mangaEpisodes}
-		/>
-	</div>
+	<ContentColumn class="border border-base-300 bg-base-100">
+		<ViewerContent client:only mangaEpisodes={mangaEpisodes} />
+	</ContentColumn>
 </ThreePanel>

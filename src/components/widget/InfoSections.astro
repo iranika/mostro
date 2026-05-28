@@ -1,0 +1,40 @@
+---
+interface Props {
+	variant?: 'desktop' | 'mobile';
+}
+
+const { variant = 'desktop' } = Astro.props;
+
+const sections = [
+	{
+		title: 'お知らせ',
+		body: '04-01 ホームページをリニューアルしました',
+	},
+	{
+		title: 'ご利用の注意',
+		body: variant === 'mobile' ? 'R-18の作品もあります。ご留意ください。' : 'R18の作品もあります。ご留意ください。',
+	},
+];
+---
+
+{
+	variant === 'mobile' ? (
+		<div class="mt-6 space-y-8 text-sm">
+			{sections.map((section) => (
+				<section>
+					<div class="text-xs text-base-content/60">{section.title}</div>
+					<div class="mt-3 font-semibold">{section.body}</div>
+				</section>
+			))}
+		</div>
+	) : (
+		<>
+			{sections.map((section) => (
+				<div class="border border-base-300 bg-base-100 p-4 text-sm">
+					<div class="opacity-70">{section.title}</div>
+					<div class="mt-2">{section.body}</div>
+				</div>
+			))}
+		</>
+	)
+}

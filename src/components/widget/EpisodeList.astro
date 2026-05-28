@@ -1,0 +1,42 @@
+---
+import { formatEpisodeLabel, type MangaEpisode } from '../../lib/mangaData';
+
+interface Props {
+	episodes: MangaEpisode[];
+	summaryLabel?: string;
+	showTitle?: boolean;
+	maxHeightClass?: string;
+	class?: string;
+	summaryClass?: string;
+}
+
+const {
+	episodes,
+	summaryLabel = '一覧',
+	showTitle = true,
+	maxHeightClass = 'max-h-[420px]',
+	class: className = '',
+	summaryClass = 'cursor-pointer select-none py-3 text-sm font-semibold',
+} = Astro.props;
+
+const reversedEpisodes = [...episodes].reverse();
+---
+
+<details class={className}>
+	<summary class={summaryClass}>{summaryLabel}</summary>
+	<div class="border-t border-base-300 p-2">
+		<div class:list={[maxHeightClass, 'overflow-auto']}>
+			<ul class="menu menu-sm">
+				{
+					reversedEpisodes.map((episode) => (
+						<li>
+							<a href={`/viewer?page=${episode.Index}`}>
+								{formatEpisodeLabel(episode, { includeTitle: showTitle })}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</details>

@@ -1,7 +1,10 @@
 ---
-
+import ContentColumn from './widget/ContentColumn.astro';
+import LatestEpisodeCard from './widget/LatestEpisodeCard.astro';
 import { getMangaEpisodes } from '../lib/mangaData';
+
 const episodes = getMangaEpisodes();
+
 function pickHero() {
 	const heroCandidates = import.meta.glob<{ default: { src: string; width: number; height: number } }>(
 		'../assets/top/**/top.*',
@@ -23,33 +26,37 @@ function pickHero() {
 
 const hero = pickHero();
 const latest = episodes.at(-1);
-const latestLabel = latest ? `第${latest.Index}話 ${latest.Title}` : '';
-
 ---
-<div class="w-full max-w-[560px]">
-    <div class="border border-base-300 bg-base-100">
-        {hero ? (
-            <img
-                src={hero.src}
-                width={hero.width}
-                height={hero.height}
-                alt="top"
-                class="h-auto w-full"
-                decoding="async"
-                loading="eager"
-            />
-        ) : (
-            <div class="flex aspect-[4/3] w-full items-center justify-center bg-base-200 text-sm opacity-70">
-                hero image not found
-            </div>
-        )}
-        {latest ? (
-            <div class="flex items-center justify-between gap-3 border-t border-base-300 p-3">
-                <div class="text-sm opacity-70">最新: {latestLabel}</div>
-                <a class="btn btn-sm btn-primary" href={`/viewer?page=${latest.Index}`}>
-                    読む
-                </a>
-            </div>
-        ) : null}
-    </div>
-</div>
+
+<ContentColumn>
+	<div class="border border-base-300 bg-base-100">
+		{
+			hero ? (
+				<img
+					src={hero.src}
+					width={hero.width}
+					height={hero.height}
+					alt="top"
+					class="h-auto w-full"
+					decoding="async"
+					loading="eager"
+				/>
+			) : (
+				<div class="flex aspect-[4/3] w-full items-center justify-center bg-base-200 text-sm opacity-70">
+					hero image not found
+				</div>
+			)
+		}
+		{
+			latest ? (
+				<div class="border-t border-base-300 p-3">
+					<LatestEpisodeCard
+						latest={latest}
+						includeTitle
+						buttonClass="btn btn-sm btn-primary"
+					/>
+				</div>
+			) : null
+		}
+	</div>
+</ContentColumn>

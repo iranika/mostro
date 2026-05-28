@@ -1,0 +1,19 @@
+---
+interface Props {
+	siteTitle: string;
+	asLink?: boolean;
+	class?: string;
+}
+
+const { siteTitle, asLink = true, class: className = '' } = Astro.props;
+---
+
+{
+	asLink ? (
+		<a href="/" class={className}>
+			<div class="text-xl font-bold tracking-wide">{siteTitle}</div>
+		</a>
+	) : (
+		<div class:list={["text-xl font-bold tracking-wide", className]}>{siteTitle}</div>
+	)
+}
