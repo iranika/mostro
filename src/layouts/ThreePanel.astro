@@ -23,11 +23,11 @@ const episodeSortOptions = [
 	{ value: 'desc', label: '降順' },
 	{ value: 'asc', label: '昇順' },
 ];
-const episodeSortButtonBaseClass = 'rounded border border-base-300 px-2 py-1.5 text-sm font-semibold leading-none transition-colors';
+const episodeSortButtonBaseClass = 'w-full rounded border border-base-300 px-2 py-1.5 text-center text-sm font-semibold leading-none transition-colors';
 const getEpisodeSortButtonClass = (sortDirection: string) => (
 	`${episodeSortButtonBaseClass} ${sortDirection === 'desc'
-		? 'bg-base-content text-base-100'
-		: 'bg-base-100 text-base-content hover:bg-base-200'}`
+		? 'bg-primary text-primary-content'
+		: 'bg-base-200 text-base-content hover:bg-base-300'}`
 );
 
 const hasLeft = Astro.slots.has('left');
@@ -335,8 +335,8 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 			const controls = Array.from(document.querySelectorAll('[data-episode-sort]'))
 				.filter((el) => el instanceof HTMLButtonElement);
 			if (!lists.length || !controls.length) return;
-			const activeClasses = ['bg-base-content', 'text-base-100'];
-			const inactiveClasses = ['bg-base-100', 'text-base-content', 'hover:bg-base-200'];
+			const activeClasses = ['bg-primary', 'text-primary-content'];
+			const inactiveClasses = ['bg-base-200', 'text-base-content', 'hover:bg-base-300'];
 
 			const setSort = (direction) => {
 				const directionMultiplier = direction === 'asc' ? 1 : -1;
