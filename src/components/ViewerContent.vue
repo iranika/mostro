@@ -9,10 +9,12 @@
         v-for="(name, j) in page.ImageUrl"
         :key="`img-${i}-${j}`"
         :src="toImageSrc(page, name)"
+        :data-fallback-src="toFallbackImageSrc(page, name)"
         :alt="`第${page.Index}話 ${page.Title}`"
         class="img4koma"
         loading="lazy"
         decoding="async"
+        @error="onImageError"
       />
     </div>
 
@@ -108,9 +110,35 @@ watch(
 );
 
 function toImageSrc(page: MangaEpisode, filename: string) {
+  const { deployPath } = buildImagePaths(page, filename);
+  return deployPath;
+}
+
+function toFallbackImageSrc(page: MangaEpisode, filename: string) {
+  const { devPath } = buildImagePaths(page, filename);
+  return devPath;
+}
+
+function buildImagePaths(page: MangaEpisode, filename: string) {
   const folder = encodeURIComponent(`${page.Index}_${page.Title}`);
   const file = encodeURIComponent(filename);
-  return `/src/assets/manga/${folder}/${file}`;
+  return {
+    deployPath: `/manga/${folder}/${file}`,
+    devPath: `/src/assets/manga/${folder}/${file}`,
+  };
+}
+
+function onImageError(event: Event) {
+  const img = event.currentTarget as HTMLImageElement | null;
+  if (!img) return;
+
+  const fallback = img.dataset.fallbackSrc;
+  if (!fallback) return;
+
+  const currentPath = new URL(img.src, window.location.origin).pathname;
+  if (currentPath === fallback) return;
+
+  img.src = fallback;
 }
 
 defineOptions({
