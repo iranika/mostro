@@ -1,0 +1,26 @@
+---
+interface Props {
+	class?: string;
+}
+
+const { class: className = 'menu border border-base-300 bg-base-100 p-3' } = Astro.props;
+---
+
+<nav class={className}>
+	<ul class="menu-sm">
+		<li><a class="font-semibold text-primary" href="/">TOP</a></li>
+		<li>
+			<a href="http://blog.livedoor.jp/kai_tyou/">ブログ</a>
+		</li>
+		<li>
+			<a
+				href="https://www.dlsite.com/home/dlaf/=/aid/momoco/url/https%3A%2F%2Fwww.dlsite.com%2Fhome%2Fcircle%2Fprofile%2F%3D%2Fmaker_id%2FRG24350.html%2F%3Futm_medium%3Daffiliate%26utm_campaign%3Dbnlink%26utm_content%3Dtext"
+			>
+				販売処
+			</a>
+		</li>
+		<li>
+			<a href="https://momoco.pages.dev/">みちくさびゅあー</a>
+		</li>
+	</ul>
+</nav>

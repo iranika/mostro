@@ -1,0 +1,36 @@
+---
+import SiteTitle from './SiteTitle.astro';
+
+interface Props {
+	siteTitle: string;
+	drawerId: string;
+}
+
+const { siteTitle, drawerId } = Astro.props;
+---
+
+<header class="navbar sticky top-0 z-10 bg-pink-500 text-white shadow-sm">
+	<div class="flex-1 px-2">
+		<SiteTitle
+			title={siteTitle}
+			linked={false}
+			class="text-xl font-bold tracking-wide text-white"
+		/>
+	</div>
+	<div class="flex-none">
+		<label for={drawerId} class="btn btn-ghost btn-square text-white" aria-label="menu">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				class="h-6 w-6 stroke-current"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M4 6h16M4 12h16M4 18h16"></path>
+			</svg>
+		</label>
+	</div>
+</header>

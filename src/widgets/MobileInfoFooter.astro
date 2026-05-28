@@ -1,0 +1,14 @@
+---
+import { SITE_ANNOUNCEMENT, SITE_USAGE_NOTICE } from '../lib/siteContent';
+import InfoCard from './InfoCard.astro';
+import SiteCopyright from './SiteCopyright.astro';
+---
+
+<div class="px-4">
+	<div class="mt-6 space-y-8 text-sm">
+		<InfoCard label="お知らせ" content={SITE_ANNOUNCEMENT} variant="mobile" />
+		<InfoCard label="ご利用の注意" content={SITE_USAGE_NOTICE} variant="mobile" />
+	</div>
+
+	<SiteCopyright />
+</div>

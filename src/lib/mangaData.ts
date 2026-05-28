@@ -85,3 +85,19 @@ export function getMangaEpisodes(): MangaEpisode[] {
 	cachedEpisodes ??= buildEpisodes();
 	return cachedEpisodes;
 }
+
+export function getLatestEpisode(episodes: MangaEpisode[]): MangaEpisode | undefined {
+	return episodes.at(-1);
+}
+
+export function getReversedEpisodes(episodes: MangaEpisode[]): MangaEpisode[] {
+	return [...episodes].reverse();
+}
+
+export function formatEpisodeLabel(
+	episode: MangaEpisode,
+	options?: { includeTitle?: boolean },
+): string {
+	const base = `第${episode.Index}話`;
+	return options?.includeTitle ? `${base} ${episode.Title}` : base;
+}

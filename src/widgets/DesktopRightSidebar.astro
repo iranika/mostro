@@ -1,0 +1,14 @@
+---
+import type { MangaEpisode } from '../lib/mangaData';
+import PackPreviewCard from './PackPreviewCard.astro';
+import ThemeSettings from './ThemeSettings.astro';
+
+interface Props {
+	episodes: MangaEpisode[];
+}
+
+const { episodes } = Astro.props;
+---
+
+<PackPreviewCard episodes={episodes} />
+<ThemeSettings />

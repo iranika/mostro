@@ -1,0 +1,19 @@
+---
+interface Props {
+	title: string;
+	class?: string;
+	linked?: boolean;
+}
+
+const { title, class: className = 'text-xl font-bold tracking-wide', linked = true } = Astro.props;
+---
+
+{
+	linked ? (
+		<a href="/">
+			<div class={className}>{title}</div>
+		</a>
+	) : (
+		<div class={className}>{title}</div>
+	)
+}

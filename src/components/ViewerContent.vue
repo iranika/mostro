@@ -33,15 +33,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { debounce } from '../lib/debounce';
 import type { MangaEpisode } from '../lib/mangaData';
-
-function debounce<T extends (...args: any[]) => void>(fn: T, wait: number) {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  return (...args: Parameters<T>) => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), wait);
-  };
-}
 
 const props = withDefaults(
   defineProps<{

@@ -1,0 +1,26 @@
+---
+import type { MangaEpisode } from '../lib/mangaData';
+import { formatEpisodeLabel, getLatestEpisode, getReversedEpisodes } from '../lib/mangaData';
+import EpisodeListDetails from './EpisodeListDetails.astro';
+
+interface Props {
+	episodes: MangaEpisode[];
+}
+
+const { episodes } = Astro.props;
+const latest = getLatestEpisode(episodes);
+const latestLabel = latest ? formatEpisodeLabel(latest) : '';
+const reversedEpisodes = getReversedEpisodes(episodes);
+---
+
+<div class="border border-base-300 bg-base-100 p-4">
+	<div class="text-xs font-semibold opacity-70">ぱっく〜と数コマ</div>
+	<div class="mt-3 flex items-center justify-between gap-3">
+		<div class="text-sm">{latestLabel}</div>
+		<a class="btn btn-sm btn-outline" href={latest ? `/viewer?page=${latest.Index}` : '/viewer'}>
+			読む
+		</a>
+	</div>
+
+	<EpisodeListDetails episodes={reversedEpisodes} summaryLabel="一覧" showTitle />
+</div>

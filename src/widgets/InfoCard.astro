@@ -1,0 +1,23 @@
+---
+interface Props {
+	label: string;
+	content: string;
+	variant?: 'desktop' | 'mobile';
+}
+
+const { label, content, variant = 'desktop' } = Astro.props;
+---
+
+{
+	variant === 'desktop' ? (
+		<div class="border border-base-300 bg-base-100 p-4 text-sm">
+			<div class="opacity-70">{label}</div>
+			<div class="mt-2">{content}</div>
+		</div>
+	) : (
+		<section>
+			<div class="text-xs text-base-content/60">{label}</div>
+			<div class="mt-3 font-semibold">{content}</div>
+		</section>
+	)
+}

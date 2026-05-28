@@ -1,6 +1,12 @@
 ---
 import Layout from './Layout.astro';
 import { getMangaEpisodes } from '../lib/mangaData';
+import DesktopLeftSidebar from '../widgets/DesktopLeftSidebar.astro';
+import DesktopRightSidebar from '../widgets/DesktopRightSidebar.astro';
+import MobileDrawerSidebar from '../widgets/MobileDrawerSidebar.astro';
+import MobileHeader from '../widgets/MobileHeader.astro';
+import MobileInfoFooter from '../widgets/MobileInfoFooter.astro';
+import ThemeToggleScript from '../widgets/ThemeToggleScript.astro';
 
 interface Props {
 	title?: string;
@@ -15,10 +21,6 @@ const {
 } = Astro.props;
 
 const episodes = getMangaEpisodes();
-const latest = episodes.at(-1);
-const latestLabel = latest ? `第${latest.Index}話` : '';
-
-const reversedEpisodes = [...episodes].reverse();
 
 const hasLeft = Astro.slots.has('left');
 const hasRight = Astro.slots.has('right');
@@ -33,48 +35,7 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 				class="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 p-6 lg:grid-cols-[220px_1fr_260px]"
 			>
 				<aside class="flex flex-col gap-6">
-					{
-						hasLeft ? (
-							<slot name="left" />
-						) : (
-							<>
-								<div class="flex flex-col items-center gap-2 pt-2">
-									<a href="/">
-										<div class="text-xl font-bold tracking-wide">{siteTitle}</div>
-									</a>
-								</div>
-
-								<nav class="menu border border-base-300 bg-base-100 p-3">
-									<ul class="menu-sm">
-										<li><a class="font-semibold text-primary" href="/">TOP</a></li>
-										<li>
-											<a href="http://blog.livedoor.jp/kai_tyou/">ブログ</a>
-										</li>
-										<li>
-											<a
-												href="https://www.dlsite.com/home/dlaf/=/aid/momoco/url/https%3A%2F%2Fwww.dlsite.com%2Fhome%2Fcircle%2Fprofile%2F%3D%2Fmaker_id%2FRG24350.html%2F%3Futm_medium%3Daffiliate%26utm_campaign%3Dbnlink%26utm_content%3Dtext"
-											>
-												販売処
-											</a>
-										</li>
-										<li>
-											<a href="https://momoco.pages.dev/">みちくさびゅあー</a>
-										</li>
-									</ul>
-								</nav>
-
-								<div class="border border-base-300 bg-base-100 p-4 text-sm">
-									<div class="opacity-70">お知らせ</div>
-									<div class="mt-2">04-01 ホームページをリニューアルしました</div>
-								</div>
-
-								<div class="border border-base-300 bg-base-100 p-4 text-sm">
-									<div class="opacity-70">ご利用の注意</div>
-									<div class="mt-2">R18の作品もあります。ご留意ください。</div>
-								</div>
-							</>
-						)
-					}
+					{hasLeft ? <slot name="left" /> : <DesktopLeftSidebar siteTitle={siteTitle} />}
 				</aside>
 
 				<main class="flex justify-center">
@@ -82,57 +43,7 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 				</main>
 
 				<aside class="flex flex-col gap-4">
-					{
-						hasRight ? (
-							<slot name="right" />
-						) : (
-							<>
-								<div class="border border-base-300 bg-base-100 p-4">
-									<div class="text-xs font-semibold opacity-70">ぱっく〜と数コマ</div>
-									<div class="mt-3 flex items-center justify-between gap-3">
-										<div class="text-sm">{latestLabel}</div>
-										<a
-											class="btn btn-sm btn-outline"
-											href={latest ? `/viewer?page=${latest.Index}` : '/viewer'}
-										>
-											読む
-										</a>
-									</div>
-									
-									<details class="">
-										<summary
-											class="cursor-pointer select-none py-3 text-sm font-semibold"
-										>
-											一覧
-										</summary>
-										<div class="border-t border-base-300 p-2">
-											<div class="max-h-[420px] overflow-auto">
-												<ul class="menu menu-sm">
-													{
-														reversedEpisodes.map((episode) => (
-															<li>
-																<a href={`/viewer?page=${episode.Index}`}>
-																	第{episode.Index}話 {episode.Title}
-																</a>
-															</li>
-														))
-													}
-												</ul>
-											</div>
-										</div>
-									</details>
-								</div>
-
-								<div class="border border-base-300 bg-base-100 p-4">
-									<div class="text-sm font-semibold">サイトの設定</div>
-									<div class="mt-3 flex items-center justify-between">
-										<span class="text-sm">DarkMode</span>
-										<input data-theme-toggle type="checkbox" class="toggle" />
-									</div>
-								</div>
-							</>
-						)
-					}
+					{hasRight ? <slot name="right" /> : <DesktopRightSidebar episodes={episodes} />}
 				</aside>
 			</div>
 		</div>
@@ -142,61 +53,13 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 			<div class="drawer drawer-end">
 				<input id={drawerId} type="checkbox" class="drawer-toggle" />
 				<div class="drawer-content">
-					<header class="navbar sticky top-0 z-10 bg-pink-500 text-white shadow-sm">
-						<div class="flex-1 px-2 text-xl font-bold tracking-wide">{siteTitle}</div>
-						<div class="flex-none">
-							<label
-								for={drawerId}
-								class="btn btn-ghost btn-square text-white"
-								aria-label="menu"
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									class="h-6 w-6 stroke-current"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M4 6h16M4 12h16M4 18h16"></path>
-								</svg>
-							</label>
-						</div>
-					</header>
+					<MobileHeader siteTitle={siteTitle} drawerId={drawerId} />
 
 					<main class="pb-10">
 						<div class="mx-auto w-full max-w-[560px]">
 							{Astro.slots.has('mobile') ? <slot name="mobile" /> : <slot />}
 
-							{
-								hasMobileFooter ? (
-									<slot name="mobile-footer" />
-								) : (
-									<div class="px-4">
-										<div class="mt-6 space-y-8 text-sm">
-											<section>
-												<div class="text-xs text-base-content/60">お知らせ</div>
-												<div class="mt-3 font-semibold">
-													04-01 ホームページをリニューアルしました
-												</div>
-											</section>
-
-											<section>
-												<div class="text-xs text-base-content/60">ご利用の注意</div>
-												<div class="mt-3 font-semibold">
-													R-18の作品もあります。ご留意ください。
-												</div>
-											</section>
-										</div>
-
-										<footer class="mt-24 pb-6 text-center text-xs text-base-content/50">
-											<div>©momotori, ©iranika April 2024+</div>
-										</footer>
-									</div>
-								)
-							}
+							{hasMobileFooter ? <slot name="mobile-footer" /> : <MobileInfoFooter />}
 						</div>
 					</main>
 				</div>
@@ -208,57 +71,7 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 							Astro.slots.has('drawer') ? (
 								<slot name="drawer" />
 							) : (
-								<>
-									<nav class="menu border border-base-300 bg-base-100 p-2">
-										<ul class="menu-sm">
-											<li><a class="font-semibold text-primary" href="/">TOP</a></li>
-											<li>
-												<a href="http://blog.livedoor.jp/kai_tyou/">ブログ</a>
-											</li>
-											<li>
-												<a
-													href="https://www.dlsite.com/home/dlaf/=/aid/momoco/url/https%3A%2F%2Fwww.dlsite.com%2Fhome%2Fcircle%2Fprofile%2F%3D%2Fmaker_id%2FRG24350.html%2F%3Futm_medium%3Daffiliate%26utm_campaign%3Dbnlink%26utm_content%3Dtext"
-												>
-													販売処
-												</a>
-											</li>
-											<li>
-												<a href="https://momoco.pages.dev/">みちくさびゅあー</a>
-											</li>
-										</ul>
-									</nav>
-
-									<details class="mt-6 border border-base-300 bg-base-100">
-										<summary
-											class="cursor-pointer select-none px-4 py-3 text-sm font-semibold"
-										>
-											話数
-										</summary>
-										<div class="border-t border-base-300 p-2">
-											<div class="max-h-[50vh] overflow-auto">
-												<ul class="menu menu-sm">
-													{
-														reversedEpisodes.map((episode) => (
-															<li>
-																<a href={`/viewer?page=${episode.Index}`}>
-																	第{episode.Index}話
-																</a>
-															</li>
-														))
-													}
-												</ul>
-											</div>
-										</div>
-									</details>
-
-									<div class="mt-6 border border-base-300 bg-base-100 p-4">
-										<div class="text-sm font-semibold">サイトの設定</div>
-										<div class="mt-3 flex items-center justify-between">
-											<span class="text-sm">DarkMode</span>
-											<input data-theme-toggle type="checkbox" class="toggle" />
-										</div>
-									</div>
-								</>
+								<MobileDrawerSidebar episodes={episodes} />
 							)
 						}
 					</div>
@@ -267,24 +80,5 @@ const hasMobileFooter = Astro.slots.has('mobile-footer');
 		</div>
 	</div>
 
-	<script is:inline>
-		(() => {
-			const root = document.documentElement;
-			const toggles = Array.from(document.querySelectorAll('input[data-theme-toggle]'))
-				.filter((el) => el instanceof HTMLInputElement);
-			const syncFromRoot = () => {
-				const current = root.getAttribute('data-theme');
-				toggles.forEach((t) => { t.checked = current === 'dark'; });
-			};
-			const setTheme = (next) => {
-				root.setAttribute('data-theme', next);
-				try { localStorage.setItem('theme', next); } catch {}
-				syncFromRoot();
-			};
-			syncFromRoot();
-			toggles.forEach((toggle) => {
-				toggle.addEventListener('change', () => setTheme(toggle.checked ? 'dark' : 'light'));
-			});
-		})();
-	</script>
+	<ThemeToggleScript />
 </Layout>

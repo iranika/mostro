@@ -1,0 +1,27 @@
+---
+import type { MangaEpisode } from '../lib/mangaData';
+import { getReversedEpisodes } from '../lib/mangaData';
+import EpisodeListDetails from './EpisodeListDetails.astro';
+import SideNav from './SideNav.astro';
+import ThemeSettings from './ThemeSettings.astro';
+
+interface Props {
+	episodes: MangaEpisode[];
+}
+
+const { episodes } = Astro.props;
+const reversedEpisodes = getReversedEpisodes(episodes);
+---
+
+<SideNav class="menu border border-base-300 bg-base-100 p-2" />
+
+<EpisodeListDetails
+	episodes={reversedEpisodes}
+	summaryLabel="話数"
+	maxHeightClass="max-h-[50vh]"
+	class="mt-6 border border-base-300 bg-base-100"
+/>
+
+<div class="mt-6">
+	<ThemeSettings />
+</div>
