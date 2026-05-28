@@ -110,21 +110,34 @@ watch(
 );
 
 function toImageSrc(page: MangaEpisode, filename: string) {
+  if (isAbsoluteImageUrl(filename)) return filename;
   const { deployPath } = buildImagePaths(page, filename);
   return deployPath;
 }
 
 function toFallbackImageSrc(page: MangaEpisode, filename: string) {
+  if (isAbsoluteImageUrl(filename)) return filename;
   const { devPath } = buildImagePaths(page, filename);
   return devPath;
+}
+
+function isAbsoluteImageUrl(path: string) {
+  return path.startsWith('/') || path.startsWith('http://') || path.startsWith('https://');
 }
 
 function buildImagePaths(page: MangaEpisode, filename: string) {
   const folder = encodeURIComponent(`${page.Index}_${page.Title}`);
   const file = encodeURIComponent(filename);
+  const deploy = `/manga/${folder}/${file}`;
+  const dev = `/src/assets/manga/${folder}/${file}`;
+
+  // dev中は /src/assets/manga を優先、build後は /manga を優先
+  const primary = import.meta.env.DEV ? dev : deploy;
+  const fallback = import.meta.env.DEV ? deploy : dev;
+
   return {
-    deployPath: `/manga/${folder}/${file}`,
-    devPath: `/src/assets/manga/${folder}/${file}`,
+    deployPath: primary,
+    devPath: fallback,
   };
 }
 

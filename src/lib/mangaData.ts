@@ -19,14 +19,16 @@ export type MangaEpisode = {
 
 function buildEpisodes(): MangaEpisode[] {
     const episodeMap: Record<string, MangaEpisode> = {};
+    const pageKeyMap: Record<string, string[]> = {};
 
-    for (const path of Object.keys(mangaImages)) {
+    for (const [path, mod] of Object.entries(mangaImages)) {
         let [index, title] = path
             .replace("../assets/manga/", "")
             .replace(/\/.*\.jpg$/, "")
             .split("_");
 
-        let imageURL = path.replace(/^.*\//, "");
+        const imageFilename = path.replace(/^.*\//, "");
+        const imageURL = mod.default.src;
 
         if (!episodeMap[index]) {
             episodeMap[index] = {
@@ -34,9 +36,11 @@ function buildEpisodes(): MangaEpisode[] {
                 Title: title,
                 ImageUrl: [],
             };
+            pageKeyMap[index] = [];
         }
 
         episodeMap[index].ImageUrl.push(imageURL);
+        pageKeyMap[index].push(imageFilename);
     }
 
     // natural sort 用の比較関数
@@ -57,10 +61,15 @@ function buildEpisodes(): MangaEpisode[] {
     };
 
     return Object.values(episodeMap)
-        .map(ep => ({
-            ...ep,
-            ImageUrl: ep.ImageUrl.sort(naturalSort)
-        }))
+        .map((ep) => {
+            const keys = pageKeyMap[String(ep.Index)] ?? [];
+            const indexed = ep.ImageUrl.map((url, i) => ({ url, key: keys[i] ?? '' }));
+            indexed.sort((a, b) => naturalSort(a.key, b.key));
+            return {
+                ...ep,
+                ImageUrl: indexed.map((v) => v.url),
+            };
+        })
         .sort((a, b) => Number(a.Index) - Number(b.Index));
 }
 
