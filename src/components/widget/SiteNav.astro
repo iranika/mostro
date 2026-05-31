@@ -1,0 +1,23 @@
+---
+import { siteLinks } from '../../lib/siteLinks';
+
+interface Props {
+	class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<nav class:list={["menu border border-base-300 bg-base-100", className]}>
+	<ul class="menu-sm">
+		{
+			siteLinks.map((link) => (
+				<li>
+					<a class:list={[link.primary && 'font-semibold text-primary']} href={link.href}>
+						{link.label}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>

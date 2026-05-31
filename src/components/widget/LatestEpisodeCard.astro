@@ -1,0 +1,31 @@
+---
+import { formatEpisodeLabel, type MangaEpisode } from '../../lib/mangaData';
+
+interface Props {
+	latest?: MangaEpisode;
+	heading?: string;
+	includeTitle?: boolean;
+	buttonClass?: string;
+	labelClass?: string;
+}
+
+const {
+	latest,
+	heading,
+	includeTitle = false,
+	buttonClass = 'btn btn-sm btn-outline',
+	labelClass = 'text-sm opacity-70',
+} = Astro.props;
+---
+
+{heading ? <div class="text-xs font-semibold opacity-70">{heading}</div> : null}
+{
+	latest ? (
+		<div class="mt-3 flex items-center justify-between gap-3">
+			<div class={labelClass}>{formatEpisodeLabel(latest, { includeTitle })}</div>
+			<a class={buttonClass} href={`/viewer?page=${latest.Index}`}>
+				読む
+			</a>
+		</div>
+	) : null
+}
