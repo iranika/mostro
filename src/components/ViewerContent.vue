@@ -12,7 +12,7 @@
         :data-fallback-src="toFallbackImageSrc(page, name)"
         :alt="`第${page.Index}話 ${page.Title}`"
         class="img4koma"
-        loading="lazy"
+        :loading="i === range.max ? 'eager' : 'lazy'"
         decoding="async"
         @error="onImageError"
       />
