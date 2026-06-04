@@ -78,6 +78,60 @@ const canShowAfter = computed(
   () => visibleIndices.value.length > 0 && pages.value.length - 1 > range.value.max,
 );
 
+const preloadedEpisodeIndices = new Set<number>();
+
+function shouldPreloadNextEpisode(): boolean {
+  if (typeof navigator === 'undefined') return true;
+  const connection = (navigator as Navigator & { connection?: NetworkInformation }).connection;
+  if (!connection) return true;
+  if (connection.saveData) return false;
+  const slowTypes = new Set(['slow-2g', '2g']);
+  if (connection.effectiveType && slowTypes.has(connection.effectiveType)) return false;
+  return true;
+}
+
+function preloadEpisodeByIndex(index: number) {
+  if (index < 0 || index >= pages.value.length) return;
+  if (preloadedEpisodeIndices.has(index)) return;
+
+  const page = pages.value[index];
+  if (!page) return;
+
+  preloadedEpisodeIndices.add(index);
+
+  for (const name of page.ImageUrl) {
+    const img = new Image();
+    img.decoding = 'async';
+    const primary = toImageSrc(page, name);
+    const fallback = toFallbackImageSrc(page, name);
+    img.onerror = () => {
+      if (!fallback) return;
+      const fallbackUrl = new URL(fallback, window.location.origin).href;
+      if (img.src !== fallbackUrl) img.src = fallback;
+    };
+    img.src = primary;
+  }
+}
+
+function schedulePreloadNextEpisode() {
+  if (!shouldPreloadNextEpisode()) return;
+  const nextIndex = range.value.max + 1;
+  if (nextIndex < 0 || nextIndex >= pages.value.length) return;
+
+  const run = () => preloadEpisodeByIndex(nextIndex);
+  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+    window.requestIdleCallback(run, { timeout: 2000 });
+  } else {
+    setTimeout(run, 0);
+  }
+}
+
+watch(
+  () => [range.value.max, pages.value.length] as const,
+  () => schedulePreloadNextEpisode(),
+  { immediate: true },
+);
+
 function addContent(step = 1) {
   if (pages.value.length === 0 || !canShowAfter.value) return;
   visibleIndices.value.push(range.value.max + step);
