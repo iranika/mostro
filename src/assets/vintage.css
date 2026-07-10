@@ -176,34 +176,36 @@ html[data-vintage='true'] .site-vintage {
 	resize: vertical;
 }
 
+/* Viewer visibility */
+html:not([data-vintage='true']) .viewer-vintage {
+	display: none !important;
+}
+
+html[data-vintage='true'] .viewer-modern {
+	display: none !important;
+}
+
+/* Vintage viewer (4koma/*.html 風: 1話分の画像を個別表示) */
+.vintage-viewer-content {
+	padding: 0;
+}
+
+.vintage-viewer-content p {
+	margin: 0;
+}
+
+.vintage-viewer-content img {
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	vertical-align: bottom;
+}
+
 /* Neutralize modern wrappers inside vintage content */
 html[data-vintage='true'] .vintage-content-column > :global(*) {
 	border: none !important;
 	background: transparent !important;
 	box-shadow: none !important;
-}
-
-html[data-vintage='true'] .viewer-content {
-	padding: 0.5rem;
-}
-
-html[data-vintage='true'] .viewer-content .img4koma {
-	width: auto;
-	max-width: 100%;
-	margin: 0 auto;
-}
-
-html[data-vintage='true'] .viewer-content .episode-block {
-	margin-bottom: 0;
-}
-
-html[data-vintage='true'] .viewer-content .btn-nav {
-	background: #fff;
-	border: 1px solid #999;
-	color: #000;
-	border-radius: 0;
-	font-size: 14px;
-	padding: 4px 12px;
 }
 
 /* Mobile: drawer with vintage styling */

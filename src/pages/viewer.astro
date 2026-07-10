@@ -2,13 +2,19 @@
 import ContentColumn from '../components/widget/ContentColumn.astro';
 import ThreePanel from '../layouts/ThreePanel.astro';
 import ViewerContent from '../components/ViewerContent.vue';
+import VintageViewerContent from '../components/VintageViewerContent.vue';
 import { getMangaEpisodes } from '../lib/mangaData';
 
 const mangaEpisodes = getMangaEpisodes();
 ---
 
 <ThreePanel title="Viewer" contentVariant="viewer">
-	<ContentColumn class="border border-base-300 bg-base-100">
-		<ViewerContent client:only mangaEpisodes={mangaEpisodes} />
-	</ContentColumn>
+	<div class="viewer-modern">
+		<ContentColumn class="border border-base-300 bg-base-100">
+			<ViewerContent client:only="vue" mangaEpisodes={mangaEpisodes} />
+		</ContentColumn>
+	</div>
+	<div class="viewer-vintage">
+		<VintageViewerContent client:only="vue" mangaEpisodes={mangaEpisodes} />
+	</div>
 </ThreePanel>
