@@ -88,16 +88,6 @@ html[data-vintage='true'] .site-vintage {
 	line-height: 1.6;
 }
 
-.vintage-menu .menu input[type='checkbox'].on-off + ul {
-	height: 0;
-	overflow: hidden;
-}
-
-.vintage-menu .menu input[type='checkbox'].on-off:checked + ul {
-	height: auto;
-	overflow: visible;
-}
-
 .vintage-menu .menu li a {
 	display: block;
 	color: #fff;
