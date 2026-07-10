@@ -1,16 +1,19 @@
 ---
 import banner from '../../assets/vintage/mcbana.gif';
-import { buildVintageEpisodeGroups } from '../../lib/vintageEpisodeGroups';
+import { buildVintageMenuChunks } from '../../lib/vintageEpisodeGroups';
 import type { MangaEpisode } from '../../lib/mangaData';
 import { siteLinks } from '../../lib/siteLinks';
+import VintageMenuGroup from './VintageMenuGroup.astro';
 
 interface Props {
 	episodes: MangaEpisode[];
+	menuInstanceId: string;
 	showSettings?: boolean;
 }
 
-const { episodes, showSettings = true } = Astro.props;
-const groups = buildVintageEpisodeGroups(episodes);
+const { episodes, menuInstanceId, showSettings = true } = Astro.props;
+const menuChunks = buildVintageMenuChunks(episodes);
+const panelId = (id: string) => `${id}-${menuInstanceId}`;
 
 const boothLink = 'https://momotori.booth.pm/';
 const seisakuLink =
@@ -19,44 +22,47 @@ const seisakuLink =
 ---
 
 <nav class="vintage-menu" aria-label="メニュー">
-	<img class="vintage-menu-banner" src={banner.src} width={banner.width} height={banner.height} alt="桃色CODE" />
-
-	<p class="vintage-menu-links">
-		<a href="/"><b>Top</b></a><br />
-		<a href={seisakuLink} target="_blank" rel="noopener noreferrer"><b>制作</b></a><br />
-		<a href={boothLink} target="_blank" rel="noopener noreferrer"><b>BOOTH</b></a>
+	<p class="vintage-menu-intro">
+		<span>
+			<img class="vintage-menu-banner" src={banner.src} width={banner.width} height={banner.height} alt="" />
+			<br /><br /><br />
+			<a href="/"><b>Top</b></a><b><br />
+			<a href={seisakuLink} target="_blank" rel="noopener noreferrer"><b>制作</b></a><b><br />
+			<a href={boothLink} target="_blank" rel="noopener noreferrer"><b>BOOTH</b></a><b><br /></b></b></b>
+		</span>
 	</p>
 
-	<div class="menu">
-		<label for="vintage-panel-backyard">ばっくやーど数こま</label>
-		<input type="checkbox" id="vintage-panel-backyard" class="on-off" />
-		<ul>
-			<li>
-				<a href="https://momoco.pages.dev/" target="_blank" rel="noopener noreferrer">みちくさびゅあー</a>
-			</li>
-		</ul>
-
-		{
-			groups.map((group) => (
-				<>
-					<label for={group.id}>{group.label}</label>
-					<input type="checkbox" id={group.id} class="on-off" />
-					<ul>
-						{group.episodes.map((episode) => (
-							<li>
-								<a href={`/viewer?page=${episode.Index}`}>{episode.Title}</a>
-							</li>
-						))}
-					</ul>
-				</>
-			))
-		}
-	</div>
+	{
+		menuChunks.map((chunk, chunkIndex) => (
+			<>
+				<div class="menu">
+					{
+						chunkIndex === 0 ? (
+							<>
+								<label for={panelId('Panel0')}>ばっくやーど数こま</label>
+								<input type="checkbox" id={panelId('Panel0')} class="on-off" />
+							</>
+						) : null
+					}
+					{chunk.groups.map((group) => <VintageMenuGroup group={group} panelId={panelId} />)}
+				</div>
+				{
+					chunk.promoAfter ? (
+						<p class="vintage-menu-promo">
+							<a href={chunk.promoAfter.href} target="_blank" rel="noopener noreferrer">
+								<b>{chunk.promoAfter.label}</b>
+							</a>
+						</p>
+					) : null
+				}
+			</>
+		))
+	}
 
 	{
 		showSettings ? (
 			<div class="vintage-menu-settings">
-				<div style="margin-bottom: 0.5rem; font-weight: bold;">サイトの設定</div>
+				<div class="vintage-menu-settings-title">サイトの設定</div>
 				<label>
 					<span>ビンテージモード</span>
 					<input data-vintage-toggle type="checkbox" checked />

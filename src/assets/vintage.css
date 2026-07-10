@@ -64,9 +64,38 @@ html[data-vintage='true'] .site-vintage {
 	height: auto;
 }
 
+.vintage-menu-intro {
+	margin: 0;
+	font-size: medium;
+}
+
+.vintage-menu-intro a {
+	color: #000;
+	text-decoration: underline;
+}
+
+.vintage-menu-promo {
+	margin: 0.5rem 0;
+}
+
+.vintage-menu-promo a {
+	color: #000;
+	text-decoration: underline;
+}
+
 .vintage-menu-links {
 	margin: 0.75rem 0 1rem;
 	line-height: 1.6;
+}
+
+.vintage-menu .menu input[type='checkbox'].on-off + ul {
+	height: 0;
+	overflow: hidden;
+}
+
+.vintage-menu .menu input[type='checkbox'].on-off:checked + ul {
+	height: 400px;
+	overflow-y: auto;
 }
 
 .vintage-menu .menu li a {
@@ -86,6 +115,11 @@ html[data-vintage='true'] .site-vintage {
 	background: olivedrab;
 	color: #fff;
 	font-size: 12px;
+}
+
+.vintage-menu-settings-title {
+	margin-bottom: 0.5rem;
+	font-weight: bold;
 }
 
 .vintage-menu-settings label {

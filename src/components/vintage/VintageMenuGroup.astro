@@ -1,0 +1,38 @@
+---
+import type { VintageEpisodeGroup } from '../../lib/vintageEpisodeGroups';
+
+interface Props {
+	group: VintageEpisodeGroup;
+	panelId: (id: string) => string;
+}
+
+const { group, panelId } = Astro.props;
+const inputId = panelId(group.id);
+---
+
+{
+	group.openByDefault ? (
+		<>
+			<label>{group.label}</label>
+			<ul>
+				{group.episodes.map((episode) => (
+					<li>
+						<a href={`/viewer?page=${episode.Index}`}>{episode.Title}</a>
+					</li>
+				))}
+			</ul>
+		</>
+	) : (
+		<>
+			<label for={inputId}>{group.label}</label>
+			<input type="checkbox" id={inputId} class="on-off" />
+			<ul>
+				{group.episodes.map((episode) => (
+					<li>
+						<a href={`/viewer?page=${episode.Index}`}>{episode.Title}</a>
+					</li>
+				))}
+			</ul>
+		</>
+	)
+}
