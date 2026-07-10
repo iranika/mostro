@@ -8,8 +8,10 @@ import ContentColumn from '../components/widget/ContentColumn.astro';
 import SiteLogo from '../components/widget/SiteLogo.astro';
 import SiteFooter from '../components/widget/SiteFooter.astro';
 import SiteNav from '../components/widget/SiteNav.astro';
-import ThemeToggle from '../components/widget/ThemeToggle.astro';
-import ThemeToggleScript from '../components/widget/ThemeToggleScript.astro';
+import SiteSettings from '../components/widget/SiteSettings.astro';
+import SiteSettingsScript from '../components/widget/SiteSettingsScript.astro';
+import VintageShell from '../components/vintage/VintageShell.astro';
+import VintageTopContent from '../components/vintage/VintageTopContent.astro';
 import Layout from './Layout.astro';
 import { getMangaEpisodes } from '../lib/mangaData';
 
@@ -17,12 +19,14 @@ interface Props {
 	title?: string;
 	drawerId?: string;
 	siteTitle?: string;
+	contentVariant?: 'top' | 'viewer' | 'default';
 }
 
 const {
 	title = '桃色CODE',
 	drawerId = 'app-drawer',
 	siteTitle = '桃色CODE',
+	contentVariant = 'default',
 } = Astro.props;
 
 const episodes = getMangaEpisodes();
@@ -36,7 +40,7 @@ const hasDrawer = Astro.slots.has('drawer');
 ---
 
 <Layout title={title}>
-	<div class="min-h-screen bg-base-100">
+	<div class="site-modern min-h-screen bg-base-100">
 		<!-- Desktop: 3 columns -->
 		<div class="hidden lg:block">
 			<div
@@ -79,7 +83,7 @@ const hasDrawer = Astro.slots.has('drawer');
 									<EpisodeList episodes={episodes} />
 								</div>
 
-								<ThemeToggle />
+								<SiteSettings />
 							</>
 						)
 					}
@@ -126,7 +130,7 @@ const hasDrawer = Astro.slots.has('drawer');
 										summaryClass="cursor-pointer select-none px-4 py-3 text-sm font-semibold"
 									/>
 
-									<ThemeToggle class="mt-6" />
+									<SiteSettings class="mt-6" />
 								</>
 							)
 						}
@@ -136,5 +140,9 @@ const hasDrawer = Astro.slots.has('drawer');
 		</div>
 	</div>
 
-	<ThemeToggleScript />
+	<VintageShell episodes={episodes} contentVariant={contentVariant}>
+		{contentVariant === 'top' ? <VintageTopContent /> : <slot />}
+	</VintageShell>
+
+	<SiteSettingsScript />
 </Layout>

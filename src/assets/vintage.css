@@ -1,0 +1,256 @@
+@import './vintage/mocode.css';
+
+/* Vintage mode visibility */
+html:not([data-vintage='true']) .site-vintage {
+	display: none !important;
+}
+
+html[data-vintage='true'] .site-modern {
+	display: none !important;
+}
+
+html[data-vintage='true'] .site-vintage {
+	display: block;
+}
+
+/* Frameset-style layout (旧サイト cols="10%,*") */
+.vintage-frameset {
+	display: flex;
+	min-height: 100vh;
+	width: 100%;
+}
+
+.vintage-menu-column {
+	flex: 0 0 10%;
+	min-width: 120px;
+	max-width: 200px;
+	color: #000;
+	background-color: #86b404;
+	background-image: url('./vintage/back.jpg');
+	background-repeat: repeat;
+	overflow-y: auto;
+	font-size: medium;
+}
+
+.vintage-content-column {
+	flex: 1 1 auto;
+	min-width: 0;
+	color: #000;
+	background-color: #f5f0e1;
+}
+
+.vintage-content-column--top {
+	background-image: url('./vintage/backtatami2.jpg');
+	background-repeat: repeat;
+}
+
+.vintage-content-column--viewer {
+	background-image: url('./vintage/back6.jpg');
+	background-repeat: repeat;
+}
+
+.vintage-menu-column a {
+	color: #000;
+	text-decoration: underline;
+}
+
+.vintage-menu-column a:hover {
+	color: #333;
+}
+
+.vintage-menu-banner {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.vintage-menu-links {
+	margin: 0.75rem 0 1rem;
+	line-height: 1.6;
+}
+
+.vintage-menu .menu li a {
+	display: block;
+	color: #fff;
+	text-decoration: none;
+}
+
+.vintage-menu .menu li a:hover {
+	background: rgba(255, 255, 255, 0.15);
+}
+
+.vintage-menu-settings {
+	margin-top: 1rem;
+	padding: 0.5rem;
+	border: 1px solid #fff;
+	background: olivedrab;
+	color: #fff;
+	font-size: 12px;
+}
+
+.vintage-menu-settings label {
+	background: transparent;
+	border: none;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+
+.vintage-menu-settings input[type='checkbox'] {
+	accent-color: yellowgreen;
+}
+
+/* TOP page (toppage.html 風) */
+.vintage-top-content {
+	padding: 1rem;
+	text-align: center;
+}
+
+.vintage-top-content hr {
+	border: none;
+	border-top: 1px solid #999;
+	margin: 1rem 0;
+}
+
+.vintage-top-hero {
+	display: block;
+	margin: 0 auto;
+	max-width: 100%;
+	height: auto;
+}
+
+.vintage-top-notice {
+	margin-top: 1.5rem;
+	text-align: left;
+	max-width: 40rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.vintage-top-notice textarea {
+	width: 100%;
+	max-width: 40rem;
+	box-sizing: border-box;
+	color: #000;
+	background-color: #fff;
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.5;
+	resize: vertical;
+}
+
+/* Neutralize modern wrappers inside vintage content */
+html[data-vintage='true'] .vintage-content-column > :global(*) {
+	border: none !important;
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+html[data-vintage='true'] .viewer-content {
+	padding: 0.5rem;
+}
+
+html[data-vintage='true'] .viewer-content .img4koma {
+	width: auto;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+html[data-vintage='true'] .viewer-content .episode-block {
+	margin-bottom: 0;
+}
+
+html[data-vintage='true'] .viewer-content .btn-nav {
+	background: #fff;
+	border: 1px solid #999;
+	color: #000;
+	border-radius: 0;
+	font-size: 14px;
+	padding: 4px 12px;
+}
+
+/* Mobile: drawer with vintage styling */
+@media (max-width: 1023px) {
+	.vintage-frameset {
+		flex-direction: column;
+	}
+
+	.vintage-menu-column {
+		display: none;
+	}
+
+	.vintage-mobile-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.5rem 0.75rem;
+		background-color: #86b404;
+		background-image: url('./vintage/back.jpg');
+		border-bottom: 1px solid #fff;
+	}
+
+	.vintage-mobile-header a {
+		color: #000;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	.vintage-mobile-menu-btn {
+		background: olivedrab;
+		color: #fff;
+		border: 1px solid #fff;
+		padding: 0.35rem 0.75rem;
+		cursor: pointer;
+		font-size: 12px;
+	}
+
+	.vintage-mobile-drawer {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		pointer-events: none;
+		visibility: hidden;
+	}
+
+	.vintage-mobile-drawer:has(#vintage-drawer-toggle:checked) {
+		pointer-events: auto;
+		visibility: visible;
+	}
+
+	.vintage-mobile-drawer-overlay {
+		position: absolute;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.4);
+	}
+
+	.vintage-mobile-drawer-panel {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: min(85vw, 280px);
+		height: 100%;
+		overflow-y: auto;
+		background-color: #86b404;
+		background-image: url('./vintage/back.jpg');
+		transform: translateX(100%);
+		transition: transform 0.2s ease;
+	}
+
+	.vintage-mobile-drawer:has(#vintage-drawer-toggle:checked) .vintage-mobile-drawer-panel {
+		transform: translateX(0);
+	}
+
+	#vintage-drawer-toggle {
+		display: none;
+	}
+}
+
+@media (min-width: 1024px) {
+	.vintage-mobile-header,
+	.vintage-mobile-drawer {
+		display: none;
+	}
+}

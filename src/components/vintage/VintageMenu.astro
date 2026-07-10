@@ -1,0 +1,67 @@
+---
+import banner from '../../assets/vintage/mcbana.gif';
+import { buildVintageEpisodeGroups } from '../../lib/vintageEpisodeGroups';
+import type { MangaEpisode } from '../../lib/mangaData';
+import { siteLinks } from '../../lib/siteLinks';
+
+interface Props {
+	episodes: MangaEpisode[];
+	showSettings?: boolean;
+}
+
+const { episodes, showSettings = true } = Astro.props;
+const groups = buildVintageEpisodeGroups(episodes);
+
+const boothLink = 'https://momotori.booth.pm/';
+const seisakuLink =
+	siteLinks.find((l) => l.label === '販売処')?.href ??
+	'https://www.dlsite.com/home/circle/profile/=/maker_id/RG24350.html';
+---
+
+<nav class="vintage-menu" aria-label="メニュー">
+	<img class="vintage-menu-banner" src={banner.src} width={banner.width} height={banner.height} alt="桃色CODE" />
+
+	<p class="vintage-menu-links">
+		<a href="/"><b>Top</b></a><br />
+		<a href={seisakuLink} target="_blank" rel="noopener noreferrer"><b>制作</b></a><br />
+		<a href={boothLink} target="_blank" rel="noopener noreferrer"><b>BOOTH</b></a>
+	</p>
+
+	<div class="menu">
+		<label for="vintage-panel-backyard">ばっくやーど数こま</label>
+		<input type="checkbox" id="vintage-panel-backyard" class="on-off" />
+		<ul>
+			<li>
+				<a href="https://momoco.pages.dev/" target="_blank" rel="noopener noreferrer">みちくさびゅあー</a>
+			</li>
+		</ul>
+
+		{
+			groups.map((group) => (
+				<>
+					<label for={group.id}>{group.label}</label>
+					<input type="checkbox" id={group.id} class="on-off" />
+					<ul>
+						{group.episodes.map((episode) => (
+							<li>
+								<a href={`/viewer?page=${episode.Index}`}>{episode.Title}</a>
+							</li>
+						))}
+					</ul>
+				</>
+			))
+		}
+	</div>
+
+	{
+		showSettings ? (
+			<div class="vintage-menu-settings">
+				<div style="margin-bottom: 0.5rem; font-weight: bold;">サイトの設定</div>
+				<label>
+					<span>ビンテージモード</span>
+					<input data-vintage-toggle type="checkbox" checked />
+				</label>
+			</div>
+		) : null
+	}
+</nav>

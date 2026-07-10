@@ -1,0 +1,25 @@
+---
+interface Props {
+	class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['border border-base-300 bg-base-100 p-4', className]}>
+	<div class="text-sm font-semibold">サイトの設定</div>
+	<div class="mt-3 flex items-center justify-between">
+		<span class="text-sm">ビンテージモード</span>
+		<input data-vintage-toggle type="checkbox" class="toggle toggle-sm" />
+	</div>
+	<div class="mt-3 flex items-center justify-between site-settings-dark">
+		<span class="text-sm">DarkMode</span>
+		<input data-theme-toggle type="checkbox" class="toggle toggle-sm" />
+	</div>
+</div>
+
+<style>
+	html[data-vintage='true'] .site-settings-dark {
+		display: none;
+	}
+</style>

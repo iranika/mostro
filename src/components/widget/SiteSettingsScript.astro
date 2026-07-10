@@ -1,0 +1,61 @@
+<script is:inline>
+	(() => {
+		const root = document.documentElement;
+		const VINTAGE_KEY = 'vintage';
+		const THEME_KEY = 'theme';
+
+		const vintageToggles = Array.from(document.querySelectorAll('input[data-vintage-toggle]')).filter(
+			(el) => el instanceof HTMLInputElement,
+		);
+		const themeToggles = Array.from(document.querySelectorAll('input[data-theme-toggle]')).filter(
+			(el) => el instanceof HTMLInputElement,
+		);
+
+		const isVintage = () => root.getAttribute('data-vintage') === 'true';
+
+		const syncVintageToggles = () => {
+			const on = isVintage();
+			vintageToggles.forEach((toggle) => {
+				toggle.checked = on;
+			});
+		};
+
+		const syncThemeToggles = () => {
+			const current = root.getAttribute('data-theme');
+			themeToggles.forEach((toggle) => {
+				toggle.checked = current === 'dark';
+			});
+		};
+
+		const setVintage = (on) => {
+			if (on) {
+				root.setAttribute('data-vintage', 'true');
+			} else {
+				root.removeAttribute('data-vintage');
+			}
+			try {
+				localStorage.setItem(VINTAGE_KEY, on ? 'true' : 'false');
+			} catch {}
+			syncVintageToggles();
+		};
+
+		const setTheme = (next) => {
+			root.setAttribute('data-theme', next);
+			try {
+				localStorage.setItem(THEME_KEY, next);
+			} catch {}
+			syncThemeToggles();
+		};
+
+		syncVintageToggles();
+		syncThemeToggles();
+
+		vintageToggles.forEach((toggle) => {
+			toggle.addEventListener('change', () => setVintage(toggle.checked));
+		});
+
+		themeToggles.forEach((toggle) => {
+			toggle.addEventListener('change', () => setTheme(toggle.checked ? 'dark' : 'light'));
+		});
+	})();
+</script>

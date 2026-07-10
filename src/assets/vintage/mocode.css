@@ -1,0 +1,54 @@
+body {
+color: #000000;
+background-color: #86B404;
+background-image: url("back.jpg")
+}
+
+
+
+
+label {
+    background: olivedrab;
+    color: #fff;
+    padding: 10px;
+    display: block;
+    margin: 0;
+    border: 1px solid #fff;
+}
+
+input[type="checkbox"].on-off{
+    display: none;
+}
+
+.menu ul {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.menu li {
+
+    background: yellowgreen;
+    color: #fff;
+
+    padding: 5px;
+
+    display: block;
+    margin: 0;
+    border: 1px solid #fff;
+
+}
+
+input[type="checkbox"].on-off + ul{
+    height: 0;
+    overflow: hidden;
+}
+
+input[type="checkbox"].on-off:checked + ul{
+    height: 400px;
+}

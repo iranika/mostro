@@ -1,0 +1,40 @@
+---
+import { getMangaEpisodes } from '../../lib/mangaData';
+
+const heroCandidates = import.meta.glob<{ default: { src: string; width: number; height: number } }>(
+	'../../assets/top/**/top.*',
+	{ eager: true },
+);
+const heroEntries = Object.entries(heroCandidates).map(([path, mod]) => ({
+	path,
+	image: mod.default,
+}));
+const hero =
+	heroEntries.find((e) => e.path.endsWith('/top.webp'))?.image ??
+	heroEntries.find((e) => e.path.endsWith('/top.jpg'))?.image;
+
+const updateLog = `●04-01 ホームページをリニューアルしました
+●旧FC2サイトのデザインをビンテージモードで再現できます`;
+---
+
+<div class="vintage-top-content">
+	<hr />
+	{
+		hero ? (
+			<img
+				class="vintage-top-hero"
+				src={hero.src}
+				width={hero.width}
+				height={hero.height}
+				alt="top"
+				decoding="async"
+				loading="eager"
+			/>
+		) : null
+	}
+	<hr />
+
+	<div class="vintage-top-notice">
+		<textarea cols={40} rows={5} readonly>{updateLog}</textarea>
+	</div>
+</div>

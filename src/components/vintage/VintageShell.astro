@@ -1,0 +1,44 @@
+---
+import VintageMenu from './VintageMenu.astro';
+import type { MangaEpisode } from '../../lib/mangaData';
+
+interface Props {
+	episodes: MangaEpisode[];
+	contentVariant?: 'top' | 'viewer' | 'default';
+}
+
+const { episodes, contentVariant = 'default' } = Astro.props;
+
+const contentClass =
+	contentVariant === 'top'
+		? 'vintage-content-column vintage-content-column--top'
+		: contentVariant === 'viewer'
+			? 'vintage-content-column vintage-content-column--viewer'
+			: 'vintage-content-column';
+---
+
+<div class="site-vintage">
+	<!-- Mobile header + drawer -->
+	<div class="vintage-mobile-header">
+		<a href="/">桃色CODE</a>
+		<label for="vintage-drawer-toggle" class="vintage-mobile-menu-btn">メニュー</label>
+	</div>
+
+	<div class="vintage-mobile-drawer">
+		<input type="checkbox" id="vintage-drawer-toggle" />
+		<label for="vintage-drawer-toggle" class="vintage-mobile-drawer-overlay" aria-label="メニューを閉じる"></label>
+		<div class="vintage-mobile-drawer-panel">
+			<VintageMenu episodes={episodes} />
+		</div>
+	</div>
+
+	<!-- Desktop frameset -->
+	<div class="vintage-frameset">
+		<aside class="vintage-menu-column">
+			<VintageMenu episodes={episodes} />
+		</aside>
+		<main class={contentClass}>
+			<slot />
+		</main>
+	</div>
+</div>
