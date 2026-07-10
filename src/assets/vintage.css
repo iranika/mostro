@@ -13,30 +13,49 @@ html[data-vintage='true'] .site-vintage {
 	display: block;
 }
 
+/* 旧サイトの frameset と同様、左右をビューポート内で独立スクロール */
+html[data-vintage='true'],
+html[data-vintage='true'] body {
+	height: 100%;
+	overflow: hidden;
+}
+
+.site-vintage {
+	height: 100dvh;
+	overflow: hidden;
+}
+
 /* Frameset-style layout (旧サイト cols="10%,*") */
 .vintage-frameset {
 	display: flex;
-	min-height: 100vh;
+	height: 100%;
 	width: 100%;
+	overflow: hidden;
 }
 
 .vintage-menu-column {
 	flex: 0 0 10%;
 	min-width: 120px;
 	max-width: 200px;
+	height: 100%;
 	color: #000;
 	background-color: #86b404;
 	background-image: url('./vintage/back.jpg');
 	background-repeat: repeat;
-	overflow-y: auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	font-size: medium;
+	-webkit-overflow-scrolling: touch;
 }
 
 .vintage-content-column {
 	flex: 1 1 auto;
 	min-width: 0;
+	height: 100%;
 	color: #000;
 	background-color: #f5f0e1;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .vintage-content-column--top {
@@ -200,12 +219,32 @@ html[data-vintage='true'] .vintage-content-column > :global(*) {
 
 /* Mobile: drawer with vintage styling */
 @media (max-width: 1023px) {
+	html[data-vintage='true'],
+	html[data-vintage='true'] body {
+		overflow: auto;
+	}
+
+	.site-vintage {
+		height: auto;
+		min-height: 100dvh;
+		overflow: visible;
+	}
+
 	.vintage-frameset {
 		flex-direction: column;
+		height: auto;
+		min-height: calc(100dvh - 2.5rem);
+		overflow: visible;
 	}
 
 	.vintage-menu-column {
 		display: none;
+	}
+
+	.vintage-content-column {
+		height: auto;
+		min-height: calc(100dvh - 2.5rem);
+		overflow: visible;
 	}
 
 	.vintage-mobile-header {
@@ -258,7 +297,9 @@ html[data-vintage='true'] .vintage-content-column > :global(*) {
 		right: 0;
 		width: min(85vw, 280px);
 		height: 100%;
-		overflow-y: auto;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		-webkit-overflow-scrolling: touch;
 		background-color: #86b404;
 		background-image: url('./vintage/back.jpg');
 		transform: translateX(100%);
@@ -271,6 +312,11 @@ html[data-vintage='true'] .vintage-content-column > :global(*) {
 
 	#vintage-drawer-toggle {
 		display: none;
+	}
+
+	.vintage-mobile-drawer-panel .vintage-menu-settings {
+		position: sticky;
+		bottom: 0;
 	}
 }
 
