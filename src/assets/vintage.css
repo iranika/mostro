@@ -94,8 +94,8 @@ html[data-vintage='true'] .site-vintage {
 }
 
 .vintage-menu .menu input[type='checkbox'].on-off:checked + ul {
-	height: 400px;
-	overflow-y: auto;
+	height: auto;
+	overflow: visible;
 }
 
 .vintage-menu .menu li a {
